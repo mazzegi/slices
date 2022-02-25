@@ -18,10 +18,14 @@ func ParseBool(s string) (bool, error) {
 	return strconv.ParseBool(strings.TrimSpace(s))
 }
 
-func Convert[S any, D any](in []S, parseFnc func(t S) (D, error)) ([]D, error) {
+func TrimSpace(s string) (string, error) {
+	return strings.TrimSpace(s), nil
+}
+
+func Convert[S any, D any](in []S, convFnc func(t S) (D, error)) ([]D, error) {
 	ts := make([]D, len(in))
 	for i, st := range in {
-		t, err := parseFnc(st)
+		t, err := convFnc(st)
 		if err != nil {
 			return nil, err
 		}

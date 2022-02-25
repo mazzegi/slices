@@ -6,6 +6,34 @@ import (
 	"testing"
 )
 
+func TestConvertStringsToTrimmedStrings(t *testing.T) {
+	tests := []struct {
+		in     []string
+		fail   bool
+		expect []string
+	}{
+		{
+			in:     []string{"1 ", "  2", " 3   "},
+			fail:   false,
+			expect: []string{"1", "2", "3"},
+		},
+	}
+	for i, test := range tests {
+		t.Run(fmt.Sprintf("test #%02d", i), func(t *testing.T) {
+			res, err := Convert(test.in, TrimSpace)
+			if err != nil {
+				if !test.fail {
+					t.Fatalf("expect NOT to fail, but got %v", err)
+				}
+			} else {
+				if !reflect.DeepEqual(test.expect, res) {
+					t.Fatalf("want %v, have %v", test.expect, res)
+				}
+			}
+		})
+	}
+}
+
 func TestConvertStringsToInts(t *testing.T) {
 	tests := []struct {
 		in     []string
